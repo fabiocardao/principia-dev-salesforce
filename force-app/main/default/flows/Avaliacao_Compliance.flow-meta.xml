@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <customErrors>
+        <name>Msg_Analise_Compliance</name>
+        <label>Msg Análise Compliance</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <customErrorMessages>
+            <errorMessage>Oportunidades com valor de venda maior que R$500.000,00 precisam passar por uma análise de Compliance antes de seguir para a etapa de “Contrato Enviado”, com o objetivo de evitar riscos financeiros.</errorMessage>
+            <fieldSelection>Resultado_da_Analise_de_Compliance__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <description>Verifica se o valor de venda é acima de R$ 500.000,00 e se for, envia para o análise do compliance.</description>
+        <name>Valor_de_Venda_Acima_de_RS500_000_00</name>
+        <label>Valor de Venda Acima de R$ 500.000,00?</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Não é acima de R$ 500.000,00</defaultConnectorLabel>
+        <rules>
+            <name>E_acima_de_RS500_000_00</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4 OR 5)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Amount</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>valorVenda</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Contrato Enviado</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Resultado_da_Analise_de_Compliance__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Resultado_da_Analise_de_Compliance__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Resultado_da_Analise_de_Compliance__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Reprovado</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Msg_Analise_Compliance</targetReference>
+            </connector>
+            <label>É acima de R$ 500.000,00?</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Avaliacao_Compliance {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Avaliacao_Compliance</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Valor_de_Venda_Acima_de_RS500_000_00</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Amount</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <numberValue>500000.0</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>StageName</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Encerrado</stringValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Variável para armazenar o valor de venda onde acima desse valor a oportunidade deve ser enviada para o time de compliance.</description>
+        <name>valorVenda</name>
+        <dataType>Currency</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>2</scale>
+        <value>
+            <numberValue>500000.0</numberValue>
+        </value>
+    </variables>
+</Flow>
