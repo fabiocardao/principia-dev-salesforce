@@ -18,5 +18,10 @@
 		<members>Opportunity.Analise_de_Compliance</members>
 		<name>ValidationRule</name>
 	</types>    
+	<types>
+		<members>Opportunity.Resultado_da_Analise_de_Compliance__c</members>
+		<members>Opportunity.Tipo__c</members>
+		<name>CustomField</name>
+	</types>
     <version>61.0</version>
 </Package>

@@ -5,9 +5,7 @@ public class OpportunityBO {
         Set<String> existingAccountIds = new Set<String>();
     
         for (Opportunity opp : opportunities) {
-            if (opp.StageName != 'Encerrado') {
-                String key = opp.AccountId + '-' + opp.StageName + '-' + opp.Tipo__c;
-                
+            if (opp.StageName != 'Encerrado') {                
                 existingOppTypes.add(key);
                 existingAccountIds.add(opp.AccountId);
             }

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Analise_de_Compliance</fullName>
-    <active>false</active>
+    <active>true</active>
     <description>Oportunidades com valor de venda maior que R$500.000,00 precisam passar por uma
 análise de Compliance antes de seguir para a etapa de “Contrato Enviado”, com o
 objetivo de evitar riscos financeiros.</description>
     <errorConditionFormula>AND(
-    ISPICKVAL(StageName, &apos;Contrato Enviado&apos;),
+				OR(
+        ISPICKVAL(StageName, &apos;Contrato Enviado&apos;),
+								ISPICKVAL(StageName, &apos;Encerrado&apos;)
+				),
     Amount &gt; 500000,
 				OR(
         ISPICKVAL(Resultado_da_Analise_de_Compliance__c, &apos;Reprovada&apos;),

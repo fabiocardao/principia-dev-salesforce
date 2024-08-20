@@ -21,7 +21,7 @@
         <defaultConnectorLabel>Não é acima de R$ 500.000,00</defaultConnectorLabel>
         <rules>
             <name>E_acima_de_RS500_000_00</name>
-            <conditionLogic>1 AND 2 AND (3 OR 4 OR 5)</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3) OR (4 OR 5)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Amount</leftValueReference>
                 <operator>GreaterThan</operator>
@@ -37,17 +37,17 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.Resultado_da_Analise_de_Compliance__c</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <stringValue>Encerrado</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
                 <leftValueReference>$Record.Resultado_da_Analise_de_Compliance__c</leftValueReference>
-                <operator>EqualTo</operator>
+                <operator>IsNull</operator>
                 <rightValue>
-                    <stringValue></stringValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -91,7 +91,7 @@
         <connector>
             <targetReference>Valor_de_Venda_Acima_de_RS500_000_00</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
+        <filterLogic>1 AND (2 OR 3) AND 4</filterLogic>
         <filters>
             <field>Amount</field>
             <operator>GreaterThan</operator>
@@ -100,17 +100,31 @@
             </value>
         </filters>
         <filters>
+            <field>Resultado_da_Analise_de_Compliance__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Resultado_da_Analise_de_Compliance__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </filters>
+        <filters>
             <field>StageName</field>
-            <operator>NotEqualTo</operator>
+            <operator>EqualTo</operator>
             <value>
                 <stringValue>Encerrado</stringValue>
             </value>
         </filters>
         <object>Opportunity</object>
-        <recordTriggerType>Update</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <variables>
         <description>Variável para armazenar o valor de venda onde acima desse valor a oportunidade deve ser enviada para o time de compliance.</description>
         <name>valorVenda</name>
