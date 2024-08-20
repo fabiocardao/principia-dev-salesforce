@@ -4,7 +4,6 @@
         <members>OpportunityBO</members>
         <members>OpportunityBOTest</members>
         <members>OpportunityTriggerHandler</members>
-        <members>OpportunityBO</members>
         <name>ApexClass</name>
     </types>
     <types>
